@@ -1,1 +1,7 @@
 python -m venv S_venv
+
+
+Example >>> import wget
+            wget.download('url')
+
+np.random.randn(d0, d1, ...)
