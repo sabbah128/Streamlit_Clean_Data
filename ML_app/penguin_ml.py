@@ -1,23 +1,26 @@
 import streamlit as st
+import numpy as np
 import pickle
-# import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import pandas as pd
 # from sklearn.metrics import accuracy_score
 # from sklearn.ensemble import RandomForestClassifier
 # from sklearn.model_selection import train_test_split
 
 
-# penguin_df = pd.read_csv('D:\Kian\GitHub_repository\Streamlit_Clean_Data\penguin_app\penguins.csv')
-# penguin_df.dropna(inplace=True)
+penguin_df = pd.read_csv('D:\Kian\GitHub_repository\Streamlit_Clean_Data\penguin_app\penguins.csv')
+penguin_df.dropna(inplace=True)
 
-# output = penguin_df['species']
-# features = penguin_df[['island', 
-#                        'bill_length_mm', 
-#                        'bill_depth_mm',
-#                        'flipper_length_mm',
-#                        'body_mass_g', 'sex']]
+output = penguin_df['species']
+features = penguin_df[['island', 
+                       'bill_length_mm', 
+                       'bill_depth_mm',
+                       'flipper_length_mm',
+                       'body_mass_g', 'sex']]
 
-# features = pd.get_dummies(features)
-# output, uniques = pd.factorize(output)
+features = pd.get_dummies(features)
+output, uniques = pd.factorize(output)
 
 # x_train, x_test, y_train, y_test = train_test_split(features, output, test_size=.3)
 
@@ -84,3 +87,34 @@ st.write(new_prediction)
 prediction_species = unique_penguin_mapping[new_prediction][0]
 
 st.write(f"We predict your penguin is of the **{prediction_species}** species")
+
+fig, ax = plt.subplots()
+ax = sns.barplot(x=rfc.feature_importances_, y=features.columns)
+plt.title('Which features are the most important for species prediction?')
+plt.xlabel('Importance')
+plt.ylabel('Feature')
+plt.tight_layout()
+st.pyplot(plt)
+
+st.write("""Below are the histograms for each
+continuous variable separated by penguin
+species. The vertical line represents
+your the inputted value.""")
+
+fig, ax = plt.subplots()
+ax = sns.displot(x=penguin_df['bill_length_mm'], hue=penguin_df['species'])
+plt.axvline(np.mean(penguin_df['bill_length_mm']))
+plt.title('Bill Length by Species')
+st.pyplot(ax)
+
+fig, ax = plt.subplots()
+ax = sns.displot(x=penguin_df['bill_depth_mm'], hue=penguin_df['species'])
+plt.axvline(np.mean(penguin_df['bill_depth_mm']))
+plt.title('Bill Depth by Species')
+st.pyplot(ax)
+
+fig, ax = plt.subplots()
+ax = sns.displot(x=penguin_df['flipper_length_mm'], hue=penguin_df['species'])
+plt.axvline(np.mean(penguin_df['flipper_length_mm']))
+plt.title('Flipper Length by Species')
+st.pyplot(ax)
