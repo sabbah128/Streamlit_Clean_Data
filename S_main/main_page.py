@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
+from streamlit_lottie import st_lottie
 
 
 st.title('This is a test for learning Streamlit.')

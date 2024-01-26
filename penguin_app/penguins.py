@@ -2,6 +2,10 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 import seaborn as sns
+# from st_aggrid import AgGrid
+# import requests
+from streamlit_lottie import st_lottie
+import json
 
 
 @st.cache_data()
@@ -13,11 +17,27 @@ def load_df(penguin_file):
         st.stop()
     return penguins_df
 
+# def load_lottieurl(url: str):
+#     r = requests.get(url)
+#     if r.status_code != 200:
+#         return None
+#     return r.json()
+
 st.title("Palmer's Penguins")
+
+# lottie_penguin = load_lottieurl(
+#     "https://assets9.lottiefiles.com/private_files/lf30_lntyk83o.json")
+
+with open('penguin.json', 'r') as f:
+    data = json.load(f)
+st_lottie(data, height=200)
+
 st.markdown('Use this Streamlit app to make your own scatterplot about penguins!')
 
 penguins_df = load_df(st.file_uploader('Select Your Local Penguins CSV'))
 
+# AgGrid(penguins_df, height=300, fit_columns_on_grid_load=True)
+st.dataframe(penguins_df, use_container_width=True)
 selected_x_var = st.selectbox('What do you want the x variable to be?', 
                             ['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'body_mass_g'])
 selected_y_var = st.selectbox('What about the y?', 
